@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "404227251099",
+    "project_id": "car360-8eee0",
+    "storage_bucket": "car360-8eee0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:404227251099:android:1a5204ee38ec4f10c91f3e",
+        "android_client_info": {
+          "package_name": "com.myapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDINvxk8vjLWwEDJrcQyXeAOTyU5HTNtNo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
