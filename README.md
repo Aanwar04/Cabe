@@ -1,79 +1,123 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Urban Uplink - Car Dealership 360° Photo App
 
-# Getting Started
+A React Native mobile application for car dealerships to create 360° photos of vehicles for their inventory.
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+## 🚗 About
 
-## Step 1: Start the Metro Server
+Urban Uplink is a mobile app designed for car dealership administrators to:
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+- Authenticate securely using Firebase
+- Create 360° panoramic photos of vehicles
+- Manage car inventory with visual documentation
+- Access the app on both iOS and Android platforms
 
-To start Metro, run the following command from the _root_ of your React Native project:
+## 📱 Features
+
+- **Secure Authentication**: Firebase email/password login with dealer admin authorization
+- **360° Camera**: Capture panoramic photos of cars
+- **Project Management**: View and manage car photo projects
+- **Profile Management**: User profile settings
+- **Cross-Platform**: Works on iOS and Android
+
+## 🛠️ Tech Stack
+
+- **React Native** - Cross-platform mobile framework
+- **Firebase Authentication** - User authentication
+- **React Navigation** - Navigation (Stack + Tabs)
+- **react-native-responsive-dimensions** - Responsive UI
+- **TypeScript** - Type safety
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js (v18 or higher)
+- React Native development environment set up
+- Firebase project configured
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
 
 ```bash
-# using npm
-npm start
+npm install
+# OR
+yarn install
+```
 
-# OR using Yarn
+3. Start Metro bundler:
+
+```bash
+npm start
+# OR
 yarn start
 ```
 
-## Step 2: Start your Application
-
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
-
-### For Android
+4. Run on Android:
 
 ```bash
-# using npm
 npm run android
-
-# OR using Yarn
+# OR
 yarn android
 ```
 
-### For iOS
+5. Run on iOS:
 
 ```bash
-# using npm
 npm run ios
-
-# OR using Yarn
+# OR
 yarn ios
 ```
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+## 📁 Project Structure
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+```
+src/
+                ├── App.tsx # Main app with auth handling
+├── MainPage.tsx            # Dashboard with "Create 360" button
+├── LoginPage.tsx           # Firebase authentication login
+├── CameraScreen.tsx        # 360° camera capture
+├── CameraPreview.tsx       # Preview captured photos
+├── MyProjects.tsx          # Projects list view
+├── ProfileScreen.tsx       # User profile
+├── TabScreens.tsx          # Tab navigation container
+├── unAuthorized.tsx        # Unauthorized access screen
+├── orientationHook.ts      # Screen orientation handling
+└── car.jpg                 # Background image
+```
 
-## Step 3: Modifying your App
+## 🔐 Authentication
 
-Now that you have successfully run the app, let's modify it.
+The app uses Firebase Authentication with custom claims:
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+- Only users with the `dealeradmin` claim can access the full app
+- Unauthorized users see a restricted access screen
+- Email/password authentication method
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+## 📸 Camera Features
 
-## Congratulations! :tada:
+- 360° panoramic photo capture
+- Camera preview before saving
+- Portrait and landscape orientation support
+- Responsive UI for all screen sizes
 
-You've successfully run and modified your React Native App. :partying_face:
+## 🎨 UI/UX
 
-### Now what?
+- Orange (#f56300) primary brand color
+- Blue (#0066cc) secondary color
+- Dark overlay backgrounds for text readability
+- Responsive button sizing with rounded corners
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
+## 📦 Dependencies
 
-# Troubleshooting
+Key dependencies include:
 
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+- @react-native-firebase/auth
+- @react-navigation/native
+- @react-navigation/native-stack
+- react-native-responsive-dimensions
 
-# Learn More
+## 📄 License
 
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+This project was bootstrapped with React Native Community CLI.
