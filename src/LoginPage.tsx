@@ -1,13 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  Alert,
-} from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import auth from '@react-native-firebase/auth'; // Import Firebase Auth
 import useScreenOrientation from './orientationHook';
 
@@ -39,18 +32,27 @@ const LoginPage = () => {
       await auth().signInWithEmailAndPassword(email, password);
       Alert.alert('Success', 'You have successfully signed in!');
       // Navigate to your home screen or desired screen
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Sign-In Error:', error);
-      // Handle errors based on Firebase error codes
-      if (error.code === 'auth/invalid-email') {
-        Alert.alert('Invalid Email', 'The email address is badly formatted.');
-      } else if (error.code === 'auth/user-not-found') {
-        Alert.alert('User Not Found', 'No user found with this email.');
-      } else if (error.code === 'auth/wrong-password') {
-        Alert.alert('Incorrect Password', 'The password is incorrect.');
-      } else {
-        Alert.alert('Error', error.message);
+      let errorMessage = 'An unexpected error occurred.';
+      if (error instanceof Error) {
+        errorMessage = error.message;
       }
+      // Handle errors based on Firebase error codes
+      if (error && typeof error === 'object' && 'code' in error) {
+        const firebaseError = error as { code: string };
+        if (firebaseError.code === 'auth/invalid-email') {
+          Alert.alert('Invalid Email', 'The email address is badly formatted.');
+          return;
+        } else if (firebaseError.code === 'auth/user-not-found') {
+          Alert.alert('User Not Found', 'No user found with this email.');
+          return;
+        } else if (firebaseError.code === 'auth/wrong-password') {
+          Alert.alert('Incorrect Password', 'The password is incorrect.');
+          return;
+        }
+      }
+      Alert.alert('Error', errorMessage);
     } finally {
       setLoading(false);
     }
@@ -84,13 +86,8 @@ const LoginPage = () => {
         <TouchableOpacity>
           <Text style={styles.linkText}>Forgot Password?</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.loginButton}
-          onPress={handleSignIn}
-          disabled={loading}>
-          <Text style={styles.loginButtonText}>
-            {loading ? 'Signing In...' : 'Login'}
-          </Text>
+        <TouchableOpacity style={styles.loginButton} onPress={handleSignIn} disabled={loading}>
+          <Text style={styles.loginButtonText}>{loading ? 'Signing In...' : 'Login'}</Text>
         </TouchableOpacity>
       </View>
     </View>
