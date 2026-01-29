@@ -1,44 +1,45 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import auth from '@react-native-firebase/auth'; // Import Firebase Auth
+import { View, Text, StyleSheet, Alert } from 'react-native';
+import auth from '@react-native-firebase/auth';
 import useScreenOrientation from './orientationHook';
+import { Button, Input } from './components/Button';
+import { validateForm, validators } from './utils/validation';
+import { useTheme } from './context/ThemeContext';
 
-const LoginPage = () => {
+const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  // useScreenOrientation('portrait'); // Lock to portrait
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  // useScreenOrientation('portrait');
+
+  const { theme } = useTheme();
 
   const handleSignIn = async () => {
-    const sanitizedEmail = email.trim();
-    const sanitizedPassword = password.trim();
-    console.log('Email:', sanitizedEmail);
-    console.log('Password:', sanitizedPassword);
+    // Validate form
+    const validation = validateForm({
+      email: { value: email, rules: [validators.required(), validators.email()] },
+      password: { value: password, rules: [validators.required()] },
+    });
 
-    if (!sanitizedEmail || !sanitizedPassword) {
-      Alert.alert('Error', 'Please enter both email and password.');
-      return;
-    }
-    if (!email || !password) {
-      Alert.alert('Error', 'Please enter both email and password.');
+    if (!validation.isValid) {
+      setErrors(validation.errors);
       return;
     }
 
+    setErrors({});
     setLoading(true);
 
     try {
-      // Firebase Sign-In
       await auth().signInWithEmailAndPassword(email, password);
       Alert.alert('Success', 'You have successfully signed in!');
-      // Navigate to your home screen or desired screen
     } catch (error: unknown) {
       console.error('Sign-In Error:', error);
       let errorMessage = 'An unexpected error occurred.';
       if (error instanceof Error) {
         errorMessage = error.message;
       }
-      // Handle errors based on Firebase error codes
       if (error && typeof error === 'object' && 'code' in error) {
         const firebaseError = error as { code: string };
         if (firebaseError.code === 'auth/invalid-email') {
@@ -59,36 +60,48 @@ const LoginPage = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <View style={styles.logoContainer}>
-        <Text style={styles.logoText}></Text>
+        <Text style={[styles.logoText, { color: theme.colors.text }]}></Text>
       </View>
 
-      <View style={styles.loginContainer}>
+      <View style={[styles.loginContainer, { backgroundColor: theme.colors.surface }]}>
         <Text style={styles.loginHeader}>Login to your account</Text>
-        <Text style={styles.emailText}>Email</Text>
-        <TextInput
-          style={styles.input}
+
+        <Input
+          value={email}
+          onChangeText={text => {
+            setEmail(text);
+            if (errors.email) setErrors(prev => ({ ...prev, email: '' }));
+          }}
           placeholder="Enter your email"
           keyboardType="email-address"
-          value={email}
-          autoCapitalize="none"
-          onChangeText={setEmail}
+          label="Email"
+          error={errors.email}
         />
-        <Text style={styles.passwordText}>Password</Text>
-        <TextInput
-          style={styles.input}
+
+        <Input
+          value={password}
+          onChangeText={text => {
+            setPassword(text);
+            if (errors.password) setErrors(prev => ({ ...prev, password: '' }));
+          }}
           placeholder="Enter your Password"
           secureTextEntry={true}
-          value={password}
-          onChangeText={setPassword}
+          label="Password"
+          error={errors.password}
         />
-        <TouchableOpacity>
-          <Text style={styles.linkText}>Forgot Password?</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.loginButton} onPress={handleSignIn} disabled={loading}>
-          <Text style={styles.loginButtonText}>{loading ? 'Signing In...' : 'Login'}</Text>
-        </TouchableOpacity>
+
+        <View style={styles.forgotPasswordContainer}>
+          <Text style={[styles.linkText, { color: theme.colors.secondary }]}>Forgot Password?</Text>
+        </View>
+
+        <Button
+          title={loading ? 'Signing In...' : 'Login'}
+          onPress={handleSignIn}
+          loading={loading}
+          style={styles.loginButton}
+        />
       </View>
     </View>
   );
@@ -97,7 +110,6 @@ const LoginPage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0066cc',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -109,10 +121,8 @@ const styles = StyleSheet.create({
   logoText: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#fff',
   },
   loginContainer: {
-    backgroundColor: '#fff',
     paddingHorizontal: '5%',
     borderRadius: 12,
     width: '100%',
@@ -124,48 +134,16 @@ const styles = StyleSheet.create({
     marginTop: '10%',
     marginBottom: '18%',
     textAlign: 'center',
-    color: 'rgba(86,86,86,1)',
   },
-  emailText: {
-    color: 'rgba(86,86,86,1)',
-    textAlign: 'left',
-    fontWeight: 'bold',
-    left: 4,
-    marginBottom: 2,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: 'rgb(195, 195, 195)',
-    borderRadius: 9,
-    paddingHorizontal: 10,
-    marginBottom: 5,
-    height: '8%',
-    color: 'black',
-  },
-  passwordText: {
-    color: 'rgba(86,86,86,1)',
-    textAlign: 'left',
-    fontWeight: 'bold',
-    left: 4,
-    marginVertical: 2,
+  forgotPasswordContainer: {
+    alignItems: 'flex-end',
+    marginBottom: '5.3%',
   },
   linkText: {
-    color: '#0066cc',
-    textAlign: 'right',
-    marginBottom: '5.3%',
     fontWeight: 'bold',
   },
   loginButton: {
-    backgroundColor: '#f56300',
-    borderRadius: 9,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '8%',
-  },
-  loginButtonText: {
-    color: '#fff',
-    fontWeight: 'semibold',
-    fontSize: 16,
+    marginTop: 10,
   },
 });
 
