@@ -196,5 +196,59 @@ npm run ios
 
 ---
 
+## 🔥 NEW SUGGESTIONS (January 2025)
+
+### Immediate Priority
+
+- [ ] **Fix Navigation** - TabScreens.tsx exists but isn't properly integrated
+- [ ] **Implement MyProjects** - Create proper project listing screen with CRUD operations
+- [ ] **Add Car Details Screen** - View/edit car information (make, model, year, VIN)
+- [ ] **Image Gallery View** - Browse captured photos with delete functionality
+- [ ] **Upload Flow** - Implement image upload to Firebase Cloud Storage
+
+### UI/UX Enhancements
+
+- [ ] **App Logo** - Add proper app icon and splash screen
+- [ ] **Empty States** - Add placeholder views for empty projects/cars
+- [ ] **Loading Skeletons** - Replace LoadingSpinner with skeleton screens
+- [ ] **Pull to Refresh** - Add pull-to-refresh for lists
+- [ ] **Confirm Dialogs** - Add confirmation for destructive actions (delete, logout)
+
+### Data Management
+
+- [ ] **Car Model/Types** - Create proper TypeScript interfaces for Car
+- [ ] **Project Model** - Define Project type with car relationships
+- [ ] **API Service Layer** - Abstract Firebase calls into dedicated services
+- [ ] **Local Caching** - Cache car data locally for offline access
+
+### Camera Improvements
+
+- [ ] **Photo Review Screen** - Review captured photos before saving
+- [ ] **Multiple Angles** - Guide user to capture front, back, sides
+- [ ] **Photo Organization** - Group photos by car/project
+- [ ] **Camera Roll** - Save photos to device gallery option
+
+### Authentication
+
+- [ ] **Sign Up Screen** - Create registration flow
+- [ ] **Password Reset** - Implement forgot password functionality
+- [ ] **Session Persistence** - Auto-login on app restart
+- [ ] **Loading State** - Better loading experience during auth
+
+### Testing
+
+- [ ] **Jest Setup** - Configure Jest for unit tests
+- [ ] **Component Tests** - Add tests for Button, Input components
+- [ ] **Page Tests** - Add tests for LoginPage, MainPage
+- [ ] **CI Pipeline** - Run tests on every commit
+
+### Documentation
+
+- [ ] **Architecture Diagram** - Visual overview of app structure
+- [ ] **Code Style Guide** - Project-specific coding conventions
+- [ ] **Setup Guide** - Step-by-step development environment setup
+
+---
+
 **Last Updated**: January 2025
 **Maintainers**: Project Team
