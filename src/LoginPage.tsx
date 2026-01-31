@@ -1,8 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import auth from '@react-native-firebase/auth';
-import useScreenOrientation from './orientationHook';
+import { useNavigation } from '@react-navigation/native';
 import { Button, Input } from './components/Button';
 import { validateForm, validators } from './utils/validation';
 import { useTheme } from './context/ThemeContext';
@@ -12,8 +12,8 @@ const LoginPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  // useScreenOrientation('portrait');
 
+  const navigation = useNavigation();
   const { theme } = useTheme();
 
   const handleSignIn = async () => {
@@ -59,6 +59,35 @@ const LoginPage: React.FC = () => {
     }
   };
 
+  const handleForgotPassword = async () => {
+    if (!email.trim()) {
+      Alert.alert('Enter Email', 'Please enter your email address first.');
+      return;
+    }
+
+    try {
+      await auth().sendPasswordResetEmail(email.trim());
+      Alert.alert('Password Reset', 'A password reset link has been sent to your email.');
+    } catch (error: unknown) {
+      let errorMessage = 'An unexpected error occurred.';
+
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+
+      if (error && typeof error === 'object' && 'code' in error) {
+        const firebaseError = error as { code: string };
+        if (firebaseError.code === 'auth/user-not-found') {
+          errorMessage = 'No account found with this email address.';
+        } else if (firebaseError.code === 'auth/invalid-email') {
+          errorMessage = 'Invalid email address.';
+        }
+      }
+
+      Alert.alert('Error', errorMessage);
+    }
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <View style={styles.logoContainer}>
@@ -93,7 +122,11 @@ const LoginPage: React.FC = () => {
         />
 
         <View style={styles.forgotPasswordContainer}>
-          <Text style={[styles.linkText, { color: theme.colors.secondary }]}>Forgot Password?</Text>
+          <TouchableOpacity onPress={handleForgotPassword}>
+            <Text style={[styles.linkText, { color: theme.colors.secondary }]}>
+              Forgot Password?
+            </Text>
+          </TouchableOpacity>
         </View>
 
         <Button
@@ -102,6 +135,15 @@ const LoginPage: React.FC = () => {
           loading={loading}
           style={styles.loginButton}
         />
+
+        <View style={styles.signUpContainer}>
+          <Text style={[styles.signUpText, { color: theme.colors.text }]}>
+            Don't have an account?{' '}
+          </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('SignUpScreen' as never)}>
+            <Text style={[styles.signUpLink, { color: theme.colors.secondary }]}>Sign Up</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -144,6 +186,18 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     marginTop: 10,
+  },
+  signUpContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 20,
+  },
+  signUpText: {
+    fontSize: 14,
+  },
+  signUpLink: {
+    fontSize: 14,
+    fontWeight: 'bold',
   },
 });
 

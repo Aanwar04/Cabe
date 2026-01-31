@@ -8,9 +8,12 @@ import { Alert } from 'react-native';
 import MainPage from './src/MainPage';
 import CameraScreen from './src/CameraScreen';
 import LoginPage from './src/LoginPage';
+import SignUpScreen from './src/SignUpScreen';
 import unAuthorized from './src/unAuthorized';
 import TabScreens from './src/TabScreens';
 import CameraPreview from './src/CameraPreview';
+import CarDetailsScreen from './src/CarDetailsScreen';
+import ImageGalleryScreen from './src/ImageGalleryScreen';
 import { ThemeProvider } from './src/context/ThemeContext';
 import { ErrorBoundary } from './src/components/ErrorBoundary';
 import { LoadingScreen } from './src/components/LoadingSpinner';
@@ -71,12 +74,29 @@ const App: React.FC = () => {
             }}
           >
             {!user ? (
-              <Stack.Screen name="LoginPage" component={LoginPage} options={{ title: 'Login' }} />
+              <>
+                <Stack.Screen name="LoginPage" component={LoginPage} options={{ title: 'Login' }} />
+                <Stack.Screen
+                  name="SignUpScreen"
+                  component={SignUpScreen}
+                  options={{ title: 'Sign Up' }}
+                />
+              </>
             ) : isDealerAdmin ? (
               <>
                 <Stack.Screen name="Tab" component={TabScreens} />
                 <Stack.Screen name="CameraPreview" component={CameraPreview} />
                 <Stack.Screen name="CameraScreen" component={CameraScreen} />
+                <Stack.Screen
+                  name="CarDetails"
+                  component={CarDetailsScreen}
+                  options={{ title: 'Car Details' }}
+                />
+                <Stack.Screen
+                  name="ImageGallery"
+                  component={ImageGalleryScreen}
+                  options={{ title: 'Gallery' }}
+                />
               </>
             ) : (
               <Stack.Screen
