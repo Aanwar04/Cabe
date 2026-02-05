@@ -5,7 +5,7 @@
 // This file provides type-safe toast functions once the package is installed
 // For now, it provides a no-op implementation
 
-type ToastType = 'success' | 'error' | 'info';
+type ToastType = 'success' | 'error' | 'info' | 'warning';
 
 interface ToastParams {
   type: ToastType;
@@ -37,7 +37,11 @@ export const showInfo = (text1: string, text2?: string): void => {
   showToast('info', text1, text2);
 };
 
+export const showWarning = (text1: string, text2?: string): void => {
+  showToast('warning', text1, text2);
+};
+
 // Empty config - will be replaced after package installation
 export const toastConfig = {};
 
-export default {show: showToast, success: showSuccess, error: showError, info: showInfo};
+export default {show: showToast, success: showSuccess, error: showError, info: showInfo, warning: showWarning};
