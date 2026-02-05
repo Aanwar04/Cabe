@@ -10,6 +10,7 @@ import React, {
 import { useNetwork } from '../hooks/useNetwork';
 import { syncQueue, STORAGE_KEYS, storageJson } from '../utils/storage';
 import { showToast, showSuccess, showWarning, showInfo } from '../utils/toast';
+import { carService, projectService } from '../services/api';
 
 // Types
 interface OfflineContextType {
@@ -78,19 +79,6 @@ const getSyncManager = () => {
 
 // Process individual sync item
 const processSyncItem = async (item: SyncQueueItem): Promise<void> => {
-  // Import API service dynamically to avoid circular dependency
-  let carService: any;
-  let projectService: any;
-
-  try {
-    const api = await import('../services/api');
-    carService = api.carService;
-    projectService = api.projectService;
-  } catch (error) {
-    console.error('[OfflineContext] Failed to import API service:', error);
-    return;
-  }
-
   const data = item.data as any;
 
   switch (item.type) {

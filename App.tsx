@@ -15,6 +15,7 @@ import CameraPreview from './src/CameraPreview';
 import CarDetailsScreen from './src/CarDetailsScreen';
 import ImageGalleryScreen from './src/ImageGalleryScreen';
 import { ThemeProvider } from './src/context/ThemeContext';
+import { OfflineProvider } from './src/context/OfflineContext';
 import { ErrorBoundary } from './src/components/ErrorBoundary';
 import { LoadingScreen } from './src/components/LoadingSpinner';
 
@@ -66,48 +67,54 @@ const App: React.FC = () => {
 
   return (
     <ThemeProvider>
-      <ErrorBoundary>
-        <NavigationContainer>
-          <Stack.Navigator
-            screenOptions={{
-              headerShown: false,
-            }}
-          >
-            {!user ? (
-              <>
-                <Stack.Screen name="LoginPage" component={LoginPage} options={{ title: 'Login' }} />
+      <OfflineProvider>
+        <ErrorBoundary>
+          <NavigationContainer>
+            <Stack.Navigator
+              screenOptions={{
+                headerShown: false,
+              }}
+            >
+              {!user ? (
+                <>
+                  <Stack.Screen
+                    name="LoginPage"
+                    component={LoginPage}
+                    options={{ title: 'Login' }}
+                  />
+                  <Stack.Screen
+                    name="SignUpScreen"
+                    component={SignUpScreen}
+                    options={{ title: 'Sign Up' }}
+                  />
+                </>
+              ) : isDealerAdmin ? (
+                <>
+                  <Stack.Screen name="Tab" component={TabScreens} />
+                  <Stack.Screen name="CameraPreview" component={CameraPreview} />
+                  <Stack.Screen name="CameraScreen" component={CameraScreen} />
+                  <Stack.Screen
+                    name="CarDetails"
+                    component={CarDetailsScreen}
+                    options={{ title: 'Car Details' }}
+                  />
+                  <Stack.Screen
+                    name="ImageGallery"
+                    component={ImageGalleryScreen}
+                    options={{ title: 'Gallery' }}
+                  />
+                </>
+              ) : (
                 <Stack.Screen
-                  name="SignUpScreen"
-                  component={SignUpScreen}
-                  options={{ title: 'Sign Up' }}
+                  name="unAuthorized"
+                  component={unAuthorized}
+                  options={{ title: 'unAuthorized' }}
                 />
-              </>
-            ) : isDealerAdmin ? (
-              <>
-                <Stack.Screen name="Tab" component={TabScreens} />
-                <Stack.Screen name="CameraPreview" component={CameraPreview} />
-                <Stack.Screen name="CameraScreen" component={CameraScreen} />
-                <Stack.Screen
-                  name="CarDetails"
-                  component={CarDetailsScreen}
-                  options={{ title: 'Car Details' }}
-                />
-                <Stack.Screen
-                  name="ImageGallery"
-                  component={ImageGalleryScreen}
-                  options={{ title: 'Gallery' }}
-                />
-              </>
-            ) : (
-              <Stack.Screen
-                name="unAuthorized"
-                component={unAuthorized}
-                options={{ title: 'unAuthorized' }}
-              />
-            )}
-          </Stack.Navigator>
-        </NavigationContainer>
-      </ErrorBoundary>
+              )}
+            </Stack.Navigator>
+          </NavigationContainer>
+        </ErrorBoundary>
+      </OfflineProvider>
     </ThemeProvider>
   );
 };

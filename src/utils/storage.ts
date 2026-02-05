@@ -135,7 +135,8 @@ export const themeStorage = {
 // Pending sync queue for offline support
 interface SyncItem {
   id: string;
-  type: string;
+  type: 'car' | 'project' | 'image';
+  action: 'create' | 'update' | 'delete';
   data: object;
   timestamp: number;
 }
