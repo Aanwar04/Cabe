@@ -19,10 +19,14 @@ import { Car } from './types';
 
 type RootStackParamList = {
   CarDetails: { carId: string };
+  Report: { car: Car };
 };
 
 type CarDetailsScreenRouteProp = RouteProp<RootStackParamList, 'CarDetails'>;
-type CarDetailsScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'CarDetails'>;
+type CarDetailsScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'CarDetails' | 'Report'
+>;
 
 const CarDetailsScreen: React.FC = () => {
   const navigation = useNavigation<CarDetailsScreenNavigationProp>();
@@ -108,6 +112,11 @@ const CarDetailsScreen: React.FC = () => {
         },
       },
     ]);
+  };
+
+  const handleGenerateReport = () => {
+    if (!car) return;
+    navigation.navigate('Report', { car });
   };
 
   if (loading) {
@@ -219,6 +228,14 @@ const CarDetailsScreen: React.FC = () => {
       <View style={styles.buttonRow}>
         {editing ? null : (
           <Button title="Edit" onPress={() => setEditing(true)} style={styles.editButton} />
+        )}
+        {editing ? null : (
+          <Button
+            title="Report"
+            variant="secondary"
+            onPress={handleGenerateReport}
+            style={styles.editButton}
+          />
         )}
         <Button
           title="Delete"

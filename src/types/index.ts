@@ -58,3 +58,6 @@ export interface AuthFormData {
   password: string;
   displayName?: string;
 }
+
+// Re-export report types
+export * from './report';
