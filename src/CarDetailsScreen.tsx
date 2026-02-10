@@ -20,12 +20,13 @@ import { Car } from './types';
 type RootStackParamList = {
   CarDetails: { carId: string };
   Report: { car: Car };
+  VINScanner: { onScan?: (vin: string) => void };
 };
 
 type CarDetailsScreenRouteProp = RouteProp<RootStackParamList, 'CarDetails'>;
 type CarDetailsScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
-  'CarDetails' | 'Report'
+  'CarDetails' | 'Report' | 'VINScanner'
 >;
 
 const CarDetailsScreen: React.FC = () => {
@@ -119,6 +120,17 @@ const CarDetailsScreen: React.FC = () => {
     navigation.navigate('Report', { car });
   };
 
+  const handleScanVIN = () => {
+    navigation.navigate('VINScanner', {
+      onScan: (vin: string) => {
+        setFormData({ ...formData, vin });
+        if (!editing) {
+          setEditing(true);
+        }
+      },
+    });
+  };
+
   if (loading) {
     return (
       <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -183,6 +195,9 @@ const CarDetailsScreen: React.FC = () => {
             onChangeText={text => setFormData({ ...formData, vin: text })}
             placeholder="Enter VIN"
           />
+          <TouchableOpacity style={styles.scanButton} onPress={handleScanVIN}>
+            <Text style={styles.scanButtonText}>📷 Scan VIN</Text>
+          </TouchableOpacity>
           <Input
             label="Mileage"
             value={formData.mileage}
@@ -326,6 +341,19 @@ const styles = StyleSheet.create({
   cancelButton: {
     flex: 1,
     marginLeft: 8,
+  },
+  scanButton: {
+    backgroundColor: '#007AFF',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  scanButtonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
   },
 });
 
